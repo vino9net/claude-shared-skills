@@ -8,6 +8,58 @@ allowed-tools: Bash(gcloud*), Bash(gsutil*), Read, Grep, mcp__gcloud__run_gcloud
 
 This skill provides guidance for working with Google Cloud Platform (GCP) services, resources, and deployments.
 
+## Available Sub-Skills
+
+This skill includes specialized sub-skills for specific GCP services:
+
+- **cloud_run**: Operations for Google Cloud Run (jobs and services)
+- **compute_engine**: Operations for Google Compute Engine (VMs)
+
+These sub-skills provide detailed instructions and best practices for each service.
+
+## MCP Server Installation
+
+This skill works best with the **Google Cloud MCP server**. To install and configure it:
+
+### Installation
+
+The Google Cloud MCP server is available via npm and can be configured in your Claude Code settings.
+
+Add the following configuration to your `.mcp.json` file in your home directory (`~/.mcp.json`) or project directory:
+
+```json
+{
+  "mcpServers": {
+    "gcloud": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-gcp"],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "${GOOGLE_APPLICATION_CREDENTIALS}",
+        "GOOGLE_CLOUD_PROJECT": "${GOOGLE_CLOUD_PROJECT}"
+      }
+    }
+  }
+}
+```
+
+### Environment Variables
+
+Make sure the following environment variables are set in your shell:
+
+- `GOOGLE_APPLICATION_CREDENTIALS`: Path to your service account JSON key file
+- `GOOGLE_CLOUD_PROJECT`: Your GCP project ID
+
+You can set these in your shell profile (`.bashrc`, `.zshrc`, etc.):
+
+```bash
+export GOOGLE_CLOUD_PROJECT="your-project-id"
+export GOOGLE_APPLICATION_CREDENTIALS="$HOME/.gcp/your-service-account-key.json"
+```
+
+### Verification
+
+After configuration, restart Claude Code. The MCP server should automatically connect and provide the `mcp__gcloud__run_gcloud_command` tool for programmatic access to GCP resources.
+
 ## Core Services
 
 ### Cloud Run
@@ -121,7 +173,9 @@ gsutil iam ch USER:ROLE gs://BUCKET_NAME
 
 ### MCP Server for GCloud
 
-If the `mcp__gcloud__run_gcloud_command` MCP server is configured, use it for:
+See the [MCP Server Installation](#mcp-server-installation) section at the top of this document for setup instructions.
+
+The MCP server provides the `mcp__gcloud__run_gcloud_command` tool for:
 - Running gcloud commands programmatically
 - Querying GCP resources
 - Managing deployments

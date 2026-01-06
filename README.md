@@ -26,7 +26,7 @@ Google Cloud Platform workflows and best practices:
 
 Add to your project:
 ```bash
-git submodule add <repo-url> .claude/skills/shared
+git submodule add https://github.com/vino9net/claude-shared-skills.git .claude/skills/shared
 git commit -m "Add shared Claude skills"
 ```
 
@@ -60,5 +60,6 @@ When updating skills:
 5. Push: `git push && git push --tags`
 
 ## License
+[Apache license 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
-[Add your license here]
+

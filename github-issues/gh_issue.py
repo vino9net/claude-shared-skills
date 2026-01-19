@@ -54,8 +54,18 @@ def get_repo_info() -> tuple[str, str]:
         # https://github.com/owner/repo.git
         # git@github.com:owner/repo.git
         # https://github.com/owner/repo
+        # http://local_proxy@127.0.0.1:54190/git/owner/repo (Claude Code Web)
 
-        if remote_url.startswith("https://github.com/"):
+        if remote_url.startswith("http://local_proxy@127.0.0.1:"):
+            # Claude Code Web proxy URL format
+            # Extract path after /git/
+            if "/git/" in remote_url:
+                path = remote_url.split("/git/", 1)[1]
+                parts = path.replace(".git", "").split("/")
+            else:
+                print(f"Error: Unable to parse Claude Code Web proxy URL: {remote_url}", file=sys.stderr)
+                sys.exit(1)
+        elif remote_url.startswith("https://github.com/"):
             parts = remote_url.replace("https://github.com/", "").replace(".git", "").split("/")
         elif remote_url.startswith("git@github.com:"):
             parts = remote_url.replace("git@github.com:", "").replace(".git", "").split("/")
@@ -79,7 +89,7 @@ def github_api_request(
     endpoint: str,
     method: str = "GET",
     data: dict[str, Any] | None = None
-) -> dict[str, Any]:
+) -> Any:
     """Make a request to GitHub API."""
     url = f"https://api.github.com{endpoint}"
 

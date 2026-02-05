@@ -1,4 +1,4 @@
-# Claude Code Skills Marketplace
+# Claude Code Plugin Marketplace
 
 A collection of reusable plugins for AI coding tools.
 
@@ -20,10 +20,24 @@ A collection of reusable plugins for AI coding tools.
 
 Plugins are registered in [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Local plugins live in `plugins/`, remote plugins are referenced by GitHub repo.
 
+## Plugin Structure
+
+Each local plugin follows this structure:
+
+```
+plugins/<plugin-name>/
+├── .claude-plugin/
+│   └── plugin.json       ← Plugin manifest (name, description, skills)
+└── skills/
+    └── <skill-name>/
+        ├── SKILL.md      ← Skill definition (SKILL.md open standard)
+        └── ...            ← Supporting files
+```
+
 ## Contributing
 
 To add a plugin:
-1. **Local**: create `plugins/<name>/SKILL.md` and add an entry to `.claude-plugin/marketplace.json`
+1. **Local**: create `plugins/<name>/` with the structure above, then add an entry to `.claude-plugin/marketplace.json`
 2. **Remote**: just add a `.claude-plugin/marketplace.json` entry pointing to the GitHub repo
 
 ## License

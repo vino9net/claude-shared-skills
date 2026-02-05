@@ -1,0 +1,6 @@
+{
+  "name": "github-issues",
+  "description": "Read and comment on GitHub issues in Claude Code Web (where gh CLI doesn't work)",
+  "strict": false,
+  "skills": ["./skills/github-issues"]
+}

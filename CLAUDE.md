@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Purpose
 
-A plugin marketplace of reusable Claude Code skills following the **SKILL.md open standard** (https://agentskills.io/). Plugins can be local (in `plugins/`) or referenced from remote GitHub repos via `.claude-plugin/marketplace.json`.
+A plugin marketplace of reusable Claude Code plugins following the **SKILL.md open standard** (https://agentskills.io/). Plugins can be local (in `plugins/`) or referenced from remote GitHub repos via `.claude-plugin/marketplace.json`.
 
 ## Repository Architecture
 
@@ -13,13 +13,21 @@ A plugin marketplace of reusable Claude Code skills following the **SKILL.md ope
 ```
 .
 ├── .claude-plugin/
-│   └── marketplace.json       # Plugin marketplace catalog
+│   └── marketplace.json              # Marketplace catalog
 ├── plugins/
-│   ├── boot-gcp-vm/           # Start GCP VMs and update SSH config
-│   │   └── SKILL.md
-│   └── github-issues/         # GitHub Issues for Claude Code Web
-│       ├── SKILL.md
-│       └── gh_issue.py
+│   ├── boot-gcp-vm/
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json           # Plugin manifest
+│   │   └── skills/
+│   │       └── boot-gcp-vm/
+│   │           └── SKILL.md
+│   └── github-issues/
+│       ├── .claude-plugin/
+│       │   └── plugin.json
+│       └── skills/
+│           └── github-issues/
+│               ├── SKILL.md
+│               └── gh_issue.py
 ├── CLAUDE.md
 ├── README.md
 └── .claude/settings.json
@@ -29,7 +37,7 @@ A plugin marketplace of reusable Claude Code skills following the **SKILL.md ope
 
 All plugins are registered in `.claude-plugin/marketplace.json` using the Claude Code marketplace format. Plugins can be:
 
-- **Local**: source files live in `plugins/<name>/`, referenced with `strict: false` and a `skills` array
+- **Local**: source files live in `plugins/<name>/`, referenced with `"source": "./plugins/<name>"`
 - **Remote**: referenced by GitHub repo, source lives elsewhere
 
 ```json
@@ -39,15 +47,27 @@ All plugins are registered in `.claude-plugin/marketplace.json` using the Claude
   "plugins": [
     {
       "name": "boot-gcp-vm",
-      "source": "./plugins/boot-gcp-vm",
-      "strict": false,
-      "skills": ["./plugins/boot-gcp-vm"]
+      "description": "Start a GCP VM and update local SSH config",
+      "source": "./plugins/boot-gcp-vm"
     },
     {
       "name": "python-dev",
       "source": { "source": "github", "repo": "vino9net/claude-python-skill" }
     }
   ]
+}
+```
+
+### Plugin Manifest (`plugin.json`)
+
+Each local plugin has its own `.claude-plugin/plugin.json` that declares the plugin name, description, and references its skills:
+
+```json
+{
+  "name": "boot-gcp-vm",
+  "description": "Start a GCP VM and update local SSH config",
+  "strict": false,
+  "skills": ["./skills/boot-gcp-vm"]
 }
 ```
 
@@ -72,8 +92,16 @@ All plugins are registered in `.claude-plugin/marketplace.json` using the Claude
 
 ### Adding a Local Plugin
 
-1. Create `plugins/<plugin-name>/SKILL.md`
-2. Add an entry to `.claude-plugin/marketplace.json` with `"source": "./plugins/<plugin-name>"`, `"strict": false`, and `"skills": ["./plugins/<plugin-name>"]`
+1. Create the plugin directory structure:
+   ```
+   plugins/<plugin-name>/
+   ├── .claude-plugin/
+   │   └── plugin.json
+   └── skills/
+       └── <skill-name>/
+           └── SKILL.md
+   ```
+2. Add an entry to `.claude-plugin/marketplace.json` with `"source": "./plugins/<plugin-name>"`
 
 ### Adding a Remote Plugin
 
@@ -82,7 +110,7 @@ All plugins are registered in `.claude-plugin/marketplace.json` using the Claude
 
 ### SKILL.md Format
 
-Each plugin follows the SKILL.md standard with:
+Each skill follows the SKILL.md standard with:
 - **Frontmatter**: `name`, `description`, `allowed-tools` in YAML format
 - **Content**: Detailed instructions, code examples, common patterns
 - **Workflows**: Step-by-step procedures for common tasks

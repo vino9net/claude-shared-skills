@@ -1,6 +1,4 @@
 {
   "name": "boot-gcp-vm",
-  "description": "Start a GCP VM and update local SSH config with its new IP address",
-  "strict": false,
-  "skills": ["./skills/boot-gcp-vm"]
+  "description": "Start a GCP VM and update local SSH config with its new IP address"
 }
